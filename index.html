@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧪 化学实验室</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e2e8f0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .header {
+      text-align: center;
+      padding: 24px;
+      background: rgba(15, 23, 42, 0.8);
+      border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+    }
+    .header h1 { font-size: 28px; }
+    .header h1 span { font-size: 32px; }
+    .header p { color: #94a3b8; margin-top: 4px; font-size: 14px; }
+
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+    }
+
+    /* === 左侧：化学物质架 === */
+    .shelf {
+      background: rgba(30, 41, 59, 0.8);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+    .shelf h2 {
+      font-size: 16px;
+      color: #a5b4fc;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .shelf-category {
+      margin-bottom: 16px;
+    }
+    .shelf-category h3 {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .chem-btn {
+      display: inline-block;
+      padding: 8px 14px;
+      margin: 3px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: rgba(51, 65, 85, 0.6);
+      color: #e2e8f0;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .chem-btn:hover {
+      background: rgba(99, 102, 241, 0.3);
+      border-color: #6366f1;
+      transform: translateY(-1px);
+    }
+    .chem-btn:active { transform: scale(0.96); }
+    .chem-btn .formula { font-weight: 700; }
+    .chem-btn .name { font-size: 11px; color: #94a3b8; display: block; margin-top: 2px; }
+
+    /* === 右侧：实验台 === */
+    .lab-bench {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* 烧杯区域 */
+    .beaker-area {
+      background: rgba(30, 41, 59, 0.8);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      min-height: 320px;
+      position: relative;
+    }
+
+    .beaker {
+      width: 200px;
+      height: 250px;
+      position: relative;
+    }
+    .beaker-glass {
+      position: absolute;
+      bottom: 0;
+      width: 200px;
+      height: 230px;
+      border: 3px solid rgba(148, 163, 184, 0.4);
+      border-top: none;
+      border-radius: 0 0 20px 20px;
+      background: rgba(148, 163, 184, 0.05);
+    }
+    .beaker-rim {
+      position: absolute;
+      top: 17px;
+      left: -8px;
+      width: 216px;
+      height: 6px;
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 3px;
+    }
+    .beaker-liquid {
+      position: absolute;
+      bottom: 3px;
+      left: 3px;
+      right: 3px;
+      height: 0;
+      border-radius: 0 0 17px 17px;
+      transition: all 0.8s ease;
+      overflow: hidden;
+    }
+    .beaker-label {
+      position: absolute;
+      bottom: -30px;
+      width: 100%;
+      text-align: center;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    /* 气泡动画 */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      animation: rise 1.5s ease-in infinite;
+    }
+    @keyframes rise {
+      0% { transform: translateY(0) scale(1); opacity: 0.6; }
+      100% { transform: translateY(-180px) scale(0.3); opacity: 0; }
+    }
+
+    /* 烟雾/气体动画 */
+    .gas-effect {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      animation: floatUp 2s ease-out infinite;
+      opacity: 0;
+    }
+    @keyframes floatUp {
+      0% { opacity: 0.8; transform: translateX(-50%) translateY(0); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-60px); }
+    }
+
+    /* 已添加物质标签 */
+    .added-items {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
+    .added-tag {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* 反应结果面板 */
+    .result-panel {
+      background: rgba(30, 41, 59, 0.8);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      min-height: 120px;
+    }
+    .result-panel h2 {
+      font-size: 16px;
+      color: #a5b4fc;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .result-empty {
+      color: #475569;
+      font-size: 14px;
+      text-align: center;
+      padding: 20px;
+    }
+    .reaction-card {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 10px;
+      animation: slideIn 0.5s ease;
+    }
+    .reaction-card.warning {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    .reaction-card.danger {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reaction-equation {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-family: 'Courier New', monospace;
+    }
+    .reaction-desc {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+    .reaction-phenomenon {
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .reaction-phenomenon span {
+      color: #fbbf24;
+    }
+
+    /* 底部按钮 */
+    .controls {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    .ctrl-btn {
+      padding: 10px 24px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: rgba(51, 65, 85, 0.6);
+      color: #e2e8f0;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .ctrl-btn:hover {
+      background: rgba(239, 68, 68, 0.3);
+      border-color: #ef4444;
+    }
+    .ctrl-btn.primary {
+      background: rgba(99, 102, 241, 0.3);
+      border-color: #6366f1;
+    }
+    .ctrl-btn.primary:hover {
+      background: rgba(99, 102, 241, 0.5);
+    }
+
+    /* 温度计 */
+    .thermometer {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 150px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 15px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .thermo-fill {
+      width: 100%;
+      height: 30%;
+      background: linear-gradient(to top, #ef4444, #f97316);
+      border-radius: 0 0 15px 15px;
+      transition: height 0.8s ease;
+    }
+    .thermo-label {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: #64748b;
+      white-space: nowrap;
+    }
+
+    /* 火焰效果 */
+    .flame {
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 28px;
+      animation: flicker 0.3s ease-in-out infinite alternate;
+      display: none;
+    }
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1); }
+      to { transform: translateX(-50%) scale(1.1); }
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1><span>🧪</span> 化学实验室</h1>
+    <p>选择化学物质添加到烧杯中，观察真实的化学反应</p>
+  </div>
+
+  <div class="main">
+    <!-- 左侧：化学物质架 -->
+    <div class="shelf">
+      <h2>🧫 化学物质架</h2>
+
+      <div class="shelf-category">
+        <h3>金属</h3>
+        <div id="metals"></div>
+      </div>
+
+      <div class="shelf-category">
+        <h3>酸</h3>
+        <div id="acids"></div>
+      </div>
+
+      <div class="shelf-category">
+        <h3>碱</h3>
+        <div id="bases"></div>
+      </div>
+
+      <div class="shelf-category">
+        <h3>盐 & 氧化物</h3>
+        <div id="salts"></div>
+      </div>
+
+      <div class="shelf-category">
+        <h3>非金属 & 其他</h3>
+        <div id="others"></div>
+      </div>
+    </div>
+
+    <!-- 右侧：实验台 -->
+    <div class="lab-bench">
+      <div class="beaker-area" id="beakerArea">
+        <div class="thermometer">
+          <div class="thermo-fill" id="thermoFill"></div>
+          <div class="thermo-label" id="thermoLabel">25°C</div>
+        </div>
+
+        <div class="added-items" id="addedItems"></div>
+
+        <div class="beaker">
+          <div class="beaker-rim"></div>
+          <div class="beaker-glass">
+            <div class="beaker-liquid" id="beakerLiquid"></div>
+          </div>
+          <div class="flame" id="flame">🔥</div>
+          <div class="beaker-label">250 mL 烧杯</div>
+        </div>
+
+        <div class="gas-effect" id="gasEffect"></div>
+      </div>
+
+      <div class="controls">
+        <button class="ctrl-btn" onclick="clearBeaker()">🗑️ 清空烧杯</button>
+        <button class="ctrl-btn primary" onclick="toggleHeat()">🔥 加热</button>
+      </div>
+
+      <div class="result-panel">
+        <h2>📋 实验记录</h2>
+        <div id="results">
+          <div class="result-empty">添加化学物质到烧杯中开始实验...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+// ==========================================
+// 化学物质数据库
+// ==========================================
+const chemicals = {
+  // 金属
+  Fe:   { name: '铁',     formula: 'Fe',    category: 'metals', color: '#78716c', state: 'solid' },
+  Cu:   { name: '铜',     formula: 'Cu',    category: 'metals', color: '#c2410c', state: 'solid' },
+  Zn:   { name: '锌',     formula: 'Zn',    category: 'metals', color: '#a1a1aa', state: 'solid' },
+  Na:   { name: '钠',     formula: 'Na',    category: 'metals', color: '#d4d4d8', state: 'solid' },
+  Mg:   { name: '镁',     formula: 'Mg',    category: 'metals', color: '#e4e4e7', state: 'solid' },
+  Al:   { name: '铝',     formula: 'Al',    category: 'metals', color: '#d4d4d8', state: 'solid' },
+  Ag:   { name: '银',     formula: 'Ag',    category: 'metals', color: '#e5e7eb', state: 'solid' },
+
+  // 酸
+  HCl:    { name: '盐酸',     formula: 'HCl',     category: 'acids', color: '#86efac', state: 'liquid' },
+  H2SO4:  { name: '硫酸',     formula: 'H₂SO₄',   category: 'acids', color: '#fef3c7', state: 'liquid' },
+  HNO3:   { name: '硝酸',     formula: 'HNO₃',    category: 'acids', color: '#fef9c3', state: 'liquid' },
+  H2CO3:  { name: '碳酸',     formula: 'H₂CO₃',   category: 'acids', color: '#e0f2fe', state: 'liquid' },
+
+  // 碱
+  NaOH:   { name: '氢氧化钠', formula: 'NaOH',    category: 'bases', color: '#e0f2fe', state: 'solid' },
+  CaOH2:  { name: '氢氧化钙', formula: 'Ca(OH)₂', category: 'bases', color: '#f5f5f4', state: 'solid' },
+  CuOH2:  { name: '氢氧化铜', formula: 'Cu(OH)₂', category: 'bases', color: '#67e8f9', state: 'solid' },
+  FeOH3:  { name: '氢氧化铁', formula: 'Fe(OH)₃', category: 'bases', color: '#b45309', state: 'solid' },
+
+  // 盐 & 氧化物
+  NaCl:   { name: '氯化钠',   formula: 'NaCl',    category: 'salts', color: '#f5f5f4', state: 'solid' },
+  CuSO4:  { name: '硫酸铜',   formula: 'CuSO₄',   category: 'salts', color: '#38bdf8', state: 'solid' },
+  CaCO3:  { name: '�ite�ite酸钙', formula: 'CaCO₃',   category: 'salts', color: '#f5f5f4', state: 'solid' },
+  BaCl2:  { name: '氯化钡',   formula: 'BaCl₂',   category: 'salts', color: '#f5f5f4', state: 'solid' },
+  AgNO3:  { name: '硝酸银',   formula: 'AgNO₃',   category: 'salts', color: '#e5e7eb', state: 'solid' },
+  CuO:    { name: '氧化铜',   formula: 'CuO',     category: 'salts', color: '#1c1917', state: 'solid' },
+  Fe2O3:  { name: '氧化铁',   formula: 'Fe₂O₃',   category: 'salts', color: '#b91c1c', state: 'solid' },
+  FeCl3:  { name: '氯化铁',   formula: 'FeCl₃',   category: 'salts', color: '#92400e', state: 'solid' },
+
+  // 非金属 & 其他
+  H2O:    { name: '水',       formula: 'H₂O',     category: 'others', color: '#bfdbfe', state: 'liquid' },
+  H2O2:   { name: '双氧水',   formula: 'H₂O₂',    category: 'others', color: '#e0f2fe', state: 'liquid' },
+  CO2:    { name: '二氧化碳', formula: 'CO₂',      category: 'others', color: 'transparent', state: 'gas' },
+  phenol: { name: '酚酞指示剂', formula: '酚酞',   category: 'others', color: '#fecdd3', state: 'liquid' },
+  litmus: { name: '石蕊指示剂', formula: '石蕊',   category: 'others', color: '#c084fc', state: 'liquid' },
+  MnO2:   { name: '二氧化锰', formula: 'MnO₂',    category: 'others', color: '#292524', state: 'solid' },
+};
+
+// 修正 CaCO3 的名字
+chemicals.CaCO3.name = '碳酸钙';
+
+// ==========================================
+// 化学反应数据库
+// ==========================================
+const reactions = [
+  // 金属 + 酸
+  {
+    reactants: ['Fe', 'HCl'],
+    equation: 'Fe + 2HCl → FeCl₂ + H₂↑',
+    description: '铁与盐酸反应，生成氯化亚铁和氢气。',
+    phenomenon: '铁片逐渐溶解，表面产生大量气泡（H₂），溶液变为浅绿色',
+    color: '#86efac', temperature: 40, bubbles: true, gasEmoji: '💨',
+    type: 'normal'
+  },
+  {
+    reactants: ['Fe', 'H2SO4'],
+    equation: 'Fe + H₂SO₄ → FeSO₄ + H₂↑',
+    description: '铁与稀硫酸反应，生成硫酸亚铁和氢气。',
+    phenomenon: '铁片逐渐溶解，表面冒出气泡（H₂），溶液变为浅绿色',
+    color: '#86efac', temperature: 45, bubbles: true, gasEmoji: '💨',
+    type: 'normal'
+  },
+  {
+    reactants: ['Zn', 'HCl'],
+    equation: 'Zn + 2HCl → ZnCl₂ + H₂↑',
+    description: '锌与盐酸反应，生成氯化锌和氢气。反应比铁更剧烈。',
+    phenomenon: '锌粒迅速溶解，产生大量气泡（H₂），溶液保持无色',
+    color: '#e0f2fe', temperature: 50, bubbles: true, gasEmoji: '💨',
+    type: 'normal'
+  },
+  {
+    reactants: ['Zn', 'H2SO4'],
+    equation: 'Zn + H₂SO₄ → ZnSO₄ + H₂↑',
+    description: '锌与稀硫酸反应，生成硫酸锌和氢气。',
+    phenomenon: '锌粒快速溶解，大量气泡冒出（H₂），溶液无色',
+    color: '#e0f2fe', temperature: 50, bubbles: true, gasEmoji: '💨',
+    type: 'normal'
+  },
+  {
+    reactants: ['Mg', 'HCl'],
+    equation: 'Mg + 2HCl → MgCl₂ + H₂↑',
+    description: '镁与盐酸反应非常剧烈，生成氯化镁和氢气。',
+    phenomenon: '镁带剧烈溶解，产生大量气泡和热量，溶液无色',
+    color: '#e0f2fe', temperature: 65, bubbles: true, gasEmoji: '💨',
+    type: 'warning'
+  },
+  {
+    reactants: ['Mg', 'H2SO4'],
+    equation: 'Mg + H₂SO₄ → MgSO₄ + H₂↑',
+    description: '镁与稀硫酸剧烈反应，放出大量热。',
+    phenomenon: '镁带迅速溶解，反应非常剧烈，大量气泡和热量',
+    color: '#e0f2fe', temperature: 70, bubbles: true, gasEmoji: '💨',
+    type: 'warning'
+  },
+  {
+    reactants: ['Cu', 'HNO3'],
+    equation: '3Cu + 8HNO₃(稀) → 3Cu(NO₃)₂ + 2NO↑ + 4H₂O',
+    description: '铜与稀硝酸反应，生成硝酸铜、一氧化氮和水。',
+    phenomenon: '铜片缓慢溶解，产生无色气体（NO，遇空气变红棕色），溶液变为蓝色',
+    color: '#38bdf8', temperature: 50, bubbles: true, gasEmoji: '🟤',
+    type: 'warning'
+  },
+  {
+    reactants: ['Al', 'HCl'],
+    equation: '2Al + 6HCl → 2AlCl₃ + 3H₂↑',
+    description: '铝与盐酸反应，生成氯化铝和氢气。',
+    phenomenon: '铝片溶解，表面大量气泡（H₂），溶液无色',
+    color: '#e0f2fe', temperature: 55, bubbles: true, gasEmoji: '💨',
+    type: 'normal'
+  },
+  {
+    reactants: ['Al', 'H2SO4'],
+    equation: '2Al + 3H₂SO₄ → Al₂(SO₄)₃ + 3H₂↑',
+    description: '铝与稀硫酸反应，生成硫酸铝和氢气。',
+    phenomenon: '铝片溶解，产生大量气泡（H₂），溶液无色',
+    color: '#e0f2fe', temperature: 55, bubbles: true, gasEmoji: '💨',
+    type: 'normal'
+  },
+
+  // 钠 + 水（超级危险！）
+  {
+    reactants: ['Na', 'H2O'],
+    equation: '2Na + 2H₂O → 2NaOH + H₂↑',
+    description: '⚠️ 钠与水剧烈反应！钠在水面上快速游动、熔成银白色小球，放出氢气。',
+    phenomenon: '钠块浮在水面剧烈反应，熔成闪亮小球四处游动，发出嘶嘶声，可能起火！溶液变碱性',
+    color: '#e0f2fe', temperature: 90, bubbles: true, gasEmoji: '🔥',
+    type: 'danger'
+  },
+
+  // 酸碱中和
+  {
+    reactants: ['NaOH', 'HCl'],
+    equation: 'NaOH + HCl → NaCl + H₂O',
+    description: '酸碱中和反应，生成食盐和水。放出热量。',
+    phenomenon: '无明显现象（若加酚酞指示剂，溶液从红色变无色）',
+    color: '#e0f2fe', temperature: 45, bubbles: false,
+    type: 'normal'
+  },
+  {
+    reactants: ['NaOH', 'H2SO4'],
+    equation: '2NaOH + H₂SO₄ → Na₂SO₄ + 2H₂O',
+    description: '强酸强碱中和反应，放出热量。',
+    phenomenon: '无明显现象，放热，溶液温度升高',
+    color: '#e0f2fe', temperature: 50, bubbles: false,
+    type: 'normal'
+  },
+  {
+    reactants: ['CaOH2', 'HCl'],
+    equation: 'Ca(OH)₂ + 2HCl → CaCl₂ + 2H₂O',
+    description: '氢氧化钙与盐酸中和。',
+    phenomenon: '白色固体逐渐溶解，溶液变澄清',
+    color: '#e0f2fe', temperature: 40, bubbles: false,
+    type: 'normal'
+  },
+  {
+    reactants: ['CaOH2', 'CO2'],
+    equation: 'Ca(OH)₂ + CO₂ → CaCO₃↓ + H₂O',
+    description: '石灰水检验CO₂的经典反应，生成碳酸钙白色沉淀。',
+    phenomenon: '澄清石灰水变浑浊（生成白色CaCO₃沉淀）',
+    color: '#f5f5f4', temperature: 25, bubbles: false,
+    type: 'normal', precipitate: true
+  },
+
+  // 碳酸盐 + 酸
+  {
+    reactants: ['CaCO3', 'HCl'],
+    equation: 'CaCO₃ + 2HCl → CaCl₂ + H₂O + CO₂↑',
+    description: '碳酸钙与盐酸反应，生成二氧化碳气体。这是实验室制CO₂的方法。',
+    phenomenon: '石灰石/大理石表面剧烈冒泡，产生大量CO₂气体',
+    color: '#e0f2fe', temperature: 30, bubbles: true, gasEmoji: '🫧',
+    type: 'normal'
+  },
+  {
+    reactants: ['CaCO3', 'H2SO4'],
+    equation: 'CaCO₃ + H₂SO₄ → CaSO₄ + H₂O + CO₂↑',
+    description: '碳酸钙与硫酸反应。但生成的硫酸钙微溶，会覆盖在碳酸钙表面，阻止反应继续。',
+    phenomenon: '开始冒泡，但很快反应变慢甚至停止（CaSO₄薄膜阻隔）',
+    color: '#e0f2fe', temperature: 30, bubbles: true, gasEmoji: '🫧',
+    type: 'warning'
+  },
+
+  // 沉淀反应
+  {
+    reactants: ['NaOH', 'CuSO4'],
+    equation: '2NaOH + CuSO₄ → Cu(OH)₂↓ + Na₂SO₄',
+    description: '生成氢氧化铜蓝色沉淀，这是检验Cu²⁺的方法。',
+    phenomenon: '立即产生天蓝色絮状沉淀 Cu(OH)₂',
+    color: '#67e8f9', temperature: 25, bubbles: false,
+    type: 'normal', precipitate: true
+  },
+  {
+    reactants: ['NaOH', 'FeCl3'],
+    equation: '3NaOH + FeCl₃ → Fe(OH)₃↓ + 3NaCl',
+    description: '生成氢氧化铁红褐色沉淀，这是检验Fe³⁺的方法。',
+    phenomenon: '立即产生红褐色絮状沉淀 Fe(OH)₃',
+    color: '#b45309', temperature: 25, bubbles: false,
+    type: 'normal', precipitate: true
+  },
+  {
+    reactants: ['BaCl2', 'H2SO4'],
+    equation: 'BaCl₂ + H₂SO₄ → BaSO₄↓ + 2HCl',
+    description: '生成硫酸钡白色沉淀，不溶于酸。这是检验SO₄²⁻的方法。',
+    phenomenon: '立即产生白色沉淀（BaSO₄），加入稀盐酸沉淀不溶解',
+    color: '#f5f5f4', temperature: 25, bubbles: false,
+    type: 'normal', precipitate: true
+  },
+  {
+    reactants: ['AgNO3', 'HCl'],
+    equation: 'AgNO₃ + HCl → AgCl↓ + HNO₃',
+    description: '生成氯化银白色沉淀，不溶于稀硝酸。这是检验Cl⁻的方法。',
+    phenomenon: '立即产生白色凝乳状沉淀（AgCl），见光会变紫黑色',
+    color: '#f5f5f4', temperature: 25, bubbles: false,
+    type: 'normal', precipitate: true
+  },
+  {
+    reactants: ['AgNO3', 'NaCl'],
+    equation: 'AgNO₃ + NaCl → AgCl↓ + NaNO₃',
+    description: '硝酸银遇氯化钠生成氯化银白色沉淀。',
+    phenomenon: '白色凝乳状沉淀（AgCl）',
+    color: '#f5f5f4', temperature: 25, bubbles: false,
+    type: 'normal', precipitate: true
+  },
+
+  // 置换反应
+  {
+    reactants: ['Fe', 'CuSO4'],
+    equation: 'Fe + CuSO₄ → FeSO₄ + Cu',
+    description: '铁置换铜。铁的活动性比铜强，能把铜从硫酸铜溶液中置换出来。',
+    phenomenon: '铁片表面出现红色物质（Cu），溶液从蓝色逐渐变为浅绿色',
+    color: '#86efac', temperature: 30, bubbles: false,
+    type: 'normal'
+  },
+  {
+    reactants: ['Zn', 'CuSO4'],
+    equation: 'Zn + CuSO₄ → ZnSO₄ + Cu',
+    description: '锌置换铜，反应比铁更快。',
+    phenomenon: '锌片表面迅速覆盖红色铜，溶液从蓝色变无色',
+    color: '#e0f2fe', temperature: 35, bubbles: false,
+    type: 'normal'
+  },
+  {
+    reactants: ['Cu', 'AgNO3'],
+    equation: 'Cu + 2AgNO₃ → Cu(NO₃)₂ + 2Ag',
+    description: '铜置换银，表面长出银白色"银树"。',
+    phenomenon: '铜丝表面逐渐长出银白色树枝状结晶（Ag），溶液变蓝色',
+    color: '#38bdf8', temperature: 28, bubbles: false,
+    type: 'normal'
+  },
+
+  // 氧化物 + 酸
+  {
+    reactants: ['CuO', 'HCl'],
+    equation: 'CuO + 2HCl → CuCl₂ + H₂O',
+    description: '氧化铜溶于盐酸，生成氯化铜蓝色溶液。',
+    phenomenon: '黑色CuO粉末逐渐溶解，溶液变为蓝绿色',
+    color: '#38bdf8', temperature: 35, bubbles: false,
+    type: 'normal'
+  },
+  {
+    reactants: ['CuO', 'H2SO4'],
+    equation: 'CuO + H₂SO₄ → CuSO₄ + H₂O',
+    description: '氧化铜溶于硫酸，生成蓝色硫酸铜溶液。',
+    phenomenon: '黑色CuO逐渐溶解，溶液变为蓝色',
+    color: '#38bdf8', temperature: 35, bubbles: false,
+    type: 'normal'
+  },
+  {
+    reactants: ['Fe2O3', 'HCl'],
+    equation: 'Fe₂O₃ + 6HCl → 2FeCl₃ + 3H₂O',
+    description: '氧化铁溶于盐酸，生成氯化铁黄色溶液。用于铁锈的清除。',
+    phenomenon: '红棕色铁锈逐渐溶解，溶液变为黄色',
+    color: '#fbbf24', temperature: 35, bubbles: false,
+    type: 'normal'
+  },
+
+  // 双氧水分解
+  {
+    reactants: ['H2O2', 'MnO2'],
+    equation: '2H₂O₂ →(MnO₂催化) 2H₂O + O₂↑',
+    description: '二氧化锰催化双氧水分解，快速产生氧气。实验室制氧气的方法。',
+    phenomenon: '双氧水剧烈分解，产生大量气泡（O₂），带出白雾。用带火星木条检验——复燃！',
+    color: '#e0f2fe', temperature: 50, bubbles: true, gasEmoji: '🫧',
+    type: 'warning'
+  },
+
+  // 指示剂
+  {
+    reactants: ['NaOH', 'phenol'],
+    equation: 'NaOH(碱性) + 酚酞 → 变红色',
+    description: '酚酞在碱性溶液中变红，在酸性和中性溶液中无色。',
+    phenomenon: '溶液立即变为品红色（酚酞遇碱变红）',
+    color: '#f472b6', temperature: 25, bubbles: false,
+    type: 'normal'
+  },
+  {
+    reactants: ['HCl', 'litmus'],
+    equation: 'HCl(酸性) + 石蕊 → 变红色',
+    description: '石蕊在酸性溶液中变红，碱性中变蓝，中性中紫色。',
+    phenomenon: '紫色石蕊溶液变为红色',
+    color: '#ef4444', temperature: 25, bubbles: false,
+    type: 'normal'
+  },
+  {
+    reactants: ['NaOH', 'litmus'],
+    equation: 'NaOH(碱性) + 石蕊 → 变蓝色',
+    description: '石蕊在碱性溶液中变蓝。',
+    phenomenon: '紫色石蕊溶液变为蓝色',
+    color: '#3b82f6', temperature: 25, bubbles: false,
+    type: 'normal'
+  },
+];
+
+// ==========================================
+// 游戏状态
+// ==========================================
+let beakerContents = [];
+let isHeating = false;
+let currentTemp = 25;
+let bubbleInterval = null;
+
+// ==========================================
+// 初始化界面
+// ==========================================
+function initShelf() {
+  const containers = {
+    metals: document.getElementById('metals'),
+    acids: document.getElementById('acids'),
+    bases: document.getElementById('bases'),
+    salts: document.getElementById('salts'),
+    others: document.getElementById('others'),
+  };
+
+  for (const [id, chem] of Object.entries(chemicals)) {
+    const btn = document.createElement('button');
+    btn.className = 'chem-btn';
+    btn.innerHTML = `<span class="formula">${chem.formula}</span><span class="name">${chem.name}</span>`;
+    btn.onclick = () => addChemical(id);
+    containers[chem.category].appendChild(btn);
+  }
+}
+
+// ==========================================
+// 添加化学物质
+// ==========================================
+function addChemical(id) {
+  if (beakerContents.length >= 4) {
+    alert('烧杯最多同时放入4种物质！请先清空。');
+    return;
+  }
+  if (beakerContents.includes(id)) {
+    return; // 不重复添加
+  }
+
+  beakerContents.push(id);
+  updateBeakerVisual();
+  updateAddedItems();
+  checkReactions();
+}
+
+// ==========================================
+// 更新烧杯外观
+// ==========================================
+function updateBeakerVisual() {
+  const liquid = document.getElementById('beakerLiquid');
+  if (beakerContents.length === 0) {
+    liquid.style.height = '0';
+    liquid.style.background = 'transparent';
+    return;
+  }
+
+  // 计算液面高度
+  const liquidItems = beakerContents.filter(id => chemicals[id].state === 'liquid');
+  const solidItems = beakerContents.filter(id => chemicals[id].state !== 'liquid');
+  const height = Math.min(70, 20 + liquidItems.length * 20 + solidItems.length * 8);
+  liquid.style.height = height + '%';
+
+  // 混合颜色（取最后添加的液体颜色）
+  const lastLiquid = [...beakerContents].reverse().find(id => chemicals[id].state === 'liquid');
+  const color = lastLiquid ? chemicals[lastLiquid].color : 'rgba(148,163,184,0.2)';
+  liquid.style.background = color;
+}
+
+// ==========================================
+// 更新已添加标签
+// ==========================================
+function updateAddedItems() {
+  const container = document.getElementById('addedItems');
+  container.innerHTML = beakerContents.map(id => {
+    const c = chemicals[id];
+    return `<div class="added-tag">${c.formula} ${c.name}</div>`;
+  }).join('');
+}
+
+// ==========================================
+// 检查反应
+// ==========================================
+function checkReactions() {
+  const resultsDiv = document.getElementById('results');
+  let foundReaction = false;
+
+  for (const rx of reactions) {
+    // 检查反应物是否都在烧杯里
+    const allPresent = rx.reactants.every(r => beakerContents.includes(r));
+    if (!allPresent) continue;
+
+    foundReaction = true;
+
+    // 更新液体颜色
+    if (rx.color) {
+      const liquid = document.getElementById('beakerLiquid');
+      liquid.style.background = rx.color;
+      // 增加液面
+      const currentH = parseInt(liquid.style.height) || 20;
+      liquid.style.height = Math.min(75, currentH + 10) + '%';
+    }
+
+    // 温度变化
+    if (rx.temperature) {
+      currentTemp = rx.temperature;
+      updateThermometer();
+    }
+
+    // 气泡效果
+    if (rx.bubbles) {
+      startBubbles();
+    }
+
+    // 气体效果
+    if (rx.gasEmoji) {
+      showGasEffect(rx.gasEmoji);
+    }
+
+    // 显示结果
+    if (resultsDiv.querySelector('.result-empty')) {
+      resultsDiv.innerHTML = '';
+    }
+
+    const card = document.createElement('div');
+    card.className = `reaction-card ${rx.type || ''}`;
+    card.innerHTML = `
+      <div class="reaction-equation">${rx.equation}</div>
+      <div class="reaction-desc">${rx.description}</div>
+      <div class="reaction-phenomenon">
+        <span>🔍 现象：</span>${rx.phenomenon}
+      </div>
+    `;
+    resultsDiv.insertBefore(card, resultsDiv.firstChild);
+  }
+
+  if (!foundReaction && beakerContents.length >= 2) {
+    // 没有已知反应
+    if (!resultsDiv.querySelector('.no-reaction')) {
+      const note = document.createElement('div');
+      note.className = 'reaction-card no-reaction';
+      note.style.background = 'rgba(100,116,139,0.1)';
+      note.style.borderColor = 'rgba(100,116,139,0.3)';
+      note.innerHTML = `<div class="reaction-desc">🤔 当前物质之间未发生明显反应。尝试换一种组合？</div>`;
+      resultsDiv.insertBefore(note, resultsDiv.firstChild);
+    }
+  }
+}
+
+// ==========================================
+// 气泡效果
+// ==========================================
+function startBubbles() {
+  if (bubbleInterval) clearInterval(bubbleInterval);
+  
+  const liquid = document.getElementById('beakerLiquid');
+  bubbleInterval = setInterval(() => {
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    const size = 4 + Math.random() * 8;
+    bubble.style.width = size + 'px';
+    bubble.style.height = size + 'px';
+    bubble.style.left = (10 + Math.random() * 80) + '%';
+    bubble.style.bottom = '10px';
+    liquid.appendChild(bubble);
+    setTimeout(() => bubble.remove(), 1500);
+  }, 200);
+
+  // 5秒后减缓
+  setTimeout(() => {
+    if (bubbleInterval) {
+      clearInterval(bubbleInterval);
+      bubbleInterval = setInterval(() => {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        const size = 3 + Math.random() * 5;
+        bubble.style.width = size + 'px';
+        bubble.style.height = size + 'px';
+        bubble.style.left = (10 + Math.random() * 80) + '%';
+        bubble.style.bottom = '10px';
+        liquid.appendChild(bubble);
+        setTimeout(() => bubble.remove(), 1500);
+      }, 600);
+    }
+  }, 5000);
+}
+
+function stopBubbles() {
+  if (bubbleInterval) {
+    clearInterval(bubbleInterval);
+    bubbleInterval = null;
+  }
+}
+
+// ==========================================
+// 气体效果
+// ==========================================
+function showGasEffect(emoji) {
+  const container = document.getElementById('beakerArea');
+  for (let i = 0; i < 5; i++) {
+    setTimeout(() => {
+      const gas = document.createElement('div');
+      gas.className = 'gas-effect';
+      gas.textContent = emoji;
+      gas.style.left = (40 + Math.random() * 20) + '%';
+      gas.style.animationDelay = (Math.random() * 0.5) + 's';
+      container.appendChild(gas);
+      setTimeout(() => gas.remove(), 2000);
+    }, i * 400);
+  }
+}
+
+// ==========================================
+// 温度计
+// ==========================================
+function updateThermometer() {
+  const fill = document.getElementById('thermoFill');
+  const label = document.getElementById('thermoLabel');
+  const pct = Math.min(95, Math.max(10, (currentTemp / 100) * 80 + 10));
+  fill.style.height = pct + '%';
+  label.textContent = currentTemp + '°C';
+}
+
+// ==========================================
+// 加热
+// ==========================================
+function toggleHeat() {
+  isHeating = !isHeating;
+  const flame = document.getElementById('flame');
+  flame.style.display = isHeating ? 'block' : 'none';
+  
+  if (isHeating) {
+    currentTemp = Math.min(100, currentTemp + 30);
+    updateThermometer();
+  } else {
+    currentTemp = Math.max(25, currentTemp - 20);
+    updateThermometer();
+  }
+}
+
+// ==========================================
+// 清空
+// ==========================================
+function clearBeaker() {
+  beakerContents = [];
+  isHeating = false;
+  currentTemp = 25;
+  stopBubbles();
+  
+  document.getElementById('flame').style.display = 'none';
+  document.getElementById('beakerLiquid').style.height = '0';
+  document.getElementById('beakerLiquid').style.background = 'transparent';
+  document.getElementById('addedItems').innerHTML = '';
+  document.getElementById('results').innerHTML = '<div class="result-empty">添加化学物质到烧杯中开始实验...</div>';
+  updateThermometer();
+  
+  // 清除残留气泡
+  document.querySelectorAll('.bubble, .gas-effect').forEach(el => el.remove());
+}
+
+// 启动
+initShelf();
+updateThermometer();
+</script>
+</body>
+</html>
