@@ -783,6 +783,80 @@ const reactions = [
   // K2Cr2O7 颜色变化
   { reactants: ['K2Cr2O7','NaOH'], equation: 'Cr₂O₇²⁻ + 2OH⁻ → 2CrO₄²⁻ + H₂O', description: '重铬酸钾遇碱：橙色→黄色。', phenomenon: '橙色溶液变为亮黄色(CrO₄²⁻)', color: '#eab308', temperature: 25, bubbles: false, type: 'normal', vfx: 'colorMagic' },
   { reactants: ['K2Cr2O7','HCl'], equation: '2CrO₄²⁻ + 2H⁺ → Cr₂O₇²⁻ + H₂O', description: '重铬酸钾遇酸保持/变橙色。', phenomenon: '溶液呈橙红色(Cr₂O₇²⁻)', color: '#ea580c', temperature: 25, bubbles: false, type: 'normal', vfx: 'colorMagic' },
+
+  // === 补充：更多金属+酸 ===
+  { reactants: ['Ca','HCl'], equation: 'Ca + 2HCl → CaCl₂ + H₂↑', description: '钙与盐酸反应。', phenomenon: '钙块溶解，产生气泡(H₂)', color: 'rgba(224,242,254,0.6)', temperature: 45, bubbles: true, gasEmoji: '💨', type: 'normal', vfx: 'fizz' },
+  { reactants: ['K','HCl'], equation: '2K + 2HCl → 2KCl + H₂↑', description: '⚠️ 钾遇酸极其剧烈！', phenomenon: '钾与盐酸爆炸性反应，产生大量H₂并起火！', color: 'rgba(224,242,254,0.6)', temperature: 95, bubbles: true, gasEmoji: '🔥', type: 'danger', vfx: 'megaExplosion' },
+  { reactants: ['Li','HCl'], equation: '2Li + 2HCl → 2LiCl + H₂↑', description: '锂与盐酸反应，较温和。', phenomenon: '锂块溶解，产生气泡(H₂)', color: 'rgba(224,242,254,0.6)', temperature: 40, bubbles: true, gasEmoji: '💨', type: 'normal', vfx: 'fizz' },
+  { reactants: ['Na','H2SO4'], equation: '2Na + H₂SO₄ → Na₂SO₄ + H₂↑', description: '⚠️ 钠遇硫酸剧烈反应！', phenomenon: '钠剧烈反应，可能起火', color: 'rgba(224,242,254,0.6)', temperature: 85, bubbles: true, gasEmoji: '🔥', type: 'danger', vfx: 'explosion' },
+  { reactants: ['K','H2SO4'], equation: '2K + H₂SO₄ → K₂SO₄ + H₂↑', description: '⚠️⚠️ 钾遇硫酸爆炸！', phenomenon: '爆炸性反应！', color: 'rgba(224,242,254,0.6)', temperature: 100, bubbles: true, gasEmoji: '🔥', type: 'danger', vfx: 'megaExplosion' },
+  { reactants: ['Mg','HNO3'], equation: '4Mg + 10HNO₃(稀) → 4Mg(NO₃)₂ + NH₄NO₃ + 3H₂O', description: '镁与稀硝酸反应。', phenomenon: '镁剧烈溶解', color: 'rgba(224,242,254,0.6)', temperature: 60, bubbles: false, type: 'warning', vfx: 'violent' },
+  { reactants: ['Fe','HNO3'], equation: 'Fe + 4HNO₃(稀) → Fe(NO₃)₃ + NO↑ + 2H₂O', description: '铁与稀硝酸反应生成三价铁。', phenomenon: '铁溶解，产生无色气体(NO遇空气变红棕)，溶液变黄色', color: '#ca8a04', temperature: 45, bubbles: true, gasEmoji: '🟤', type: 'warning', vfx: 'colorSmoke' },
+  { reactants: ['Zn','HNO3'], equation: '4Zn + 10HNO₃(稀) → 4Zn(NO₃)₂ + NH₄NO₃ + 3H₂O', description: '锌与稀硝酸反应。', phenomenon: '锌溶解，溶液无色', color: 'rgba(224,242,254,0.6)', temperature: 50, bubbles: false, type: 'normal', vfx: 'fizz' },
+  { reactants: ['Sn','H2SO4'], equation: 'Sn + H₂SO₄ → SnSO₄ + H₂↑', description: '锡与稀硫酸反应。', phenomenon: '锡缓慢溶解，少量气泡', color: 'rgba(224,242,254,0.6)', temperature: 35, bubbles: true, gasEmoji: '💨', type: 'normal', vfx: 'fizz' },
+  { reactants: ['Al','HNO3'], equation: 'Al + 4HNO₃(稀) → Al(NO₃)₃ + NO↑ + 2H₂O', description: '铝与稀硝酸反应。', phenomenon: '铝溶解，产生气体', color: 'rgba(224,242,254,0.6)', temperature: 50, bubbles: true, gasEmoji: '💨', type: 'normal', vfx: 'fizz' },
+
+  // === 补充：铜+浓硫酸（需加热） ===
+  { reactants: ['Cu','H2SO4'], equation: 'Cu + 2H₂SO₄(浓) →(加热) CuSO₄ + SO₂↑ + 2H₂O', description: '铜与浓硫酸需加热才能反应！稀硫酸不行——铜的活动性低于氢。', phenomenon: '加热后铜溶解，产生刺激性SO₂气体，溶液变蓝色', color: '#2563eb', temperature: 70, bubbles: true, gasEmoji: '💨', type: 'warning', vfx: 'colorSmoke', needsHeat: true },
+
+  // === 补充：两性金属+碱 ===
+  { reactants: ['Al','NaOH'], equation: '2Al + 2NaOH + 2H₂O → 2NaAlO₂ + 3H₂↑', description: '铝是两性金属，既能溶于酸也能溶于碱！', phenomenon: '铝片溶解，产生大量气泡(H₂)', color: 'rgba(224,242,254,0.6)', temperature: 50, bubbles: true, gasEmoji: '💨', type: 'normal', vfx: 'fizz' },
+  { reactants: ['Al','KOH'], equation: '2Al + 2KOH + 2H₂O → 2KAlO₂ + 3H₂↑', description: '铝与氢氧化钾反应。', phenomenon: '铝片溶解，产生气泡(H₂)', color: 'rgba(224,242,254,0.6)', temperature: 50, bubbles: true, gasEmoji: '💨', type: 'normal', vfx: 'fizz' },
+  { reactants: ['Zn','NaOH'], equation: 'Zn + 2NaOH → Na₂ZnO₂ + H₂↑', description: '锌也是两性金属，能溶于强碱。', phenomenon: '锌溶解，产生气泡(H₂)', color: 'rgba(224,242,254,0.6)', temperature: 45, bubbles: true, gasEmoji: '💨', type: 'normal', vfx: 'fizz' },
+
+  // === 补充：更多中和/酸碱反应 ===
+  { reactants: ['KOH','H2SO4'], equation: '2KOH + H₂SO₄ → K₂SO₄ + 2H₂O', description: '氢氧化钾与硫酸中和。', phenomenon: '放热，无明显现象', color: 'rgba(224,242,254,0.6)', temperature: 48, bubbles: false, type: 'normal', vfx: 'gentle' },
+  { reactants: ['KOH','HNO3'], equation: 'KOH + HNO₃ → KNO₃ + H₂O', description: '氢氧化钾与硝酸中和。', phenomenon: '放热', color: 'rgba(224,242,254,0.6)', temperature: 45, bubbles: false, type: 'normal', vfx: 'gentle' },
+  { reactants: ['NaOH','HNO3'], equation: 'NaOH + HNO₃ → NaNO₃ + H₂O', description: '氢氧化钠与硝酸中和。', phenomenon: '放热', color: 'rgba(224,242,254,0.6)', temperature: 45, bubbles: false, type: 'normal', vfx: 'gentle' },
+  { reactants: ['NaOH','CH3COOH'], equation: 'NaOH + CH₃COOH → CH₃COONa + H₂O', description: '氢氧化钠与醋酸中和。', phenomenon: '放热', color: 'rgba(224,242,254,0.6)', temperature: 40, bubbles: false, type: 'normal', vfx: 'gentle' },
+  { reactants: ['BaOH2','HCl'], equation: 'Ba(OH)₂ + 2HCl → BaCl₂ + 2H₂O', description: '氢氧化钡与盐酸中和。', phenomenon: '放热', color: 'rgba(224,242,254,0.6)', temperature: 42, bubbles: false, type: 'normal', vfx: 'gentle' },
+  { reactants: ['CaOH2','H2SO4'], equation: 'Ca(OH)₂ + H₂SO₄ → CaSO₄ + 2H₂O', description: '氢氧化钙与硫酸中和。', phenomenon: '可能产生微溶CaSO₄使溶液变浑浊', color: 'rgba(240,240,240,0.6)', temperature: 40, bubbles: false, type: 'normal', vfx: 'gentle' },
+  { reactants: ['NH3H2O','H2SO4'], equation: '2NH₃·H₂O + H₂SO₄ → (NH₄)₂SO₄ + 2H₂O', description: '氨水与硫酸中和。', phenomenon: '放热', color: 'rgba(224,242,254,0.6)', temperature: 40, bubbles: false, type: 'normal', vfx: 'gentle' },
+  { reactants: ['NH3H2O','HNO3'], equation: 'NH₃·H₂O + HNO₃ → NH₄NO₃ + H₂O', description: '氨水与硝酸中和。', phenomenon: '放热', color: 'rgba(224,242,254,0.6)', temperature: 40, bubbles: false, type: 'normal', vfx: 'gentle' },
+
+  // === 补充：更多碳酸盐+酸 ===
+  { reactants: ['Na2CO3','H2SO4'], equation: 'Na₂CO₃ + H₂SO₄ → Na₂SO₄ + H₂O + CO₂↑', description: '碳酸钠与硫酸反应。', phenomenon: '产生大量气泡(CO₂)', color: 'rgba(224,242,254,0.6)', temperature: 28, bubbles: true, gasEmoji: '🫧', type: 'normal', vfx: 'fizz' },
+  { reactants: ['NaHCO3','H2SO4'], equation: '2NaHCO₃ + H₂SO₄ → Na₂SO₄ + 2H₂O + 2CO₂↑', description: '小苏打与硫酸反应。', phenomenon: '大量气泡(CO₂)', color: 'rgba(224,242,254,0.6)', temperature: 25, bubbles: true, gasEmoji: '🫧', type: 'normal', vfx: 'fizz' },
+  { reactants: ['CaCO3','H2SO4'], equation: 'CaCO₃ + H₂SO₄ → CaSO₄ + H₂O + CO₂↑', description: '碳酸钙与硫酸反应，但CaSO₄微溶会阻隔反应。', phenomenon: '开始冒泡，但很快变慢(CaSO₄薄膜)', color: 'rgba(224,242,254,0.6)', temperature: 30, bubbles: true, gasEmoji: '🫧', type: 'warning', vfx: 'fizz' },
+  { reactants: ['Na2CO3','HNO3'], equation: 'Na₂CO₃ + 2HNO₃ → 2NaNO₃ + H₂O + CO₂↑', description: '碳酸钠与硝酸反应。', phenomenon: '产生气泡(CO₂)', color: 'rgba(224,242,254,0.6)', temperature: 28, bubbles: true, gasEmoji: '🫧', type: 'normal', vfx: 'fizz' },
+  { reactants: ['NaHCO3','HNO3'], equation: 'NaHCO₃ + HNO₃ → NaNO₃ + H₂O + CO₂↑', description: '小苏打与硝酸反应。', phenomenon: '产生气泡(CO₂)', color: 'rgba(224,242,254,0.6)', temperature: 25, bubbles: true, gasEmoji: '🫧', type: 'normal', vfx: 'fizz' },
+  { reactants: ['CaCO3','HNO3'], equation: 'CaCO₃ + 2HNO₃ → Ca(NO₃)₂ + H₂O + CO₂↑', description: '碳酸钙与硝酸反应。', phenomenon: '石灰石冒泡(CO₂)，逐渐溶解', color: 'rgba(224,242,254,0.6)', temperature: 30, bubbles: true, gasEmoji: '🫧', type: 'normal', vfx: 'fizz' },
+
+  // === 补充：氧化物+酸 ===
+  { reactants: ['Fe2O3','H2SO4'], equation: 'Fe₂O₃ + 3H₂SO₄ → Fe₂(SO₄)₃ + 3H₂O', description: '氧化铁溶于硫酸。', phenomenon: '红棕色粉末溶解，溶液变黄色', color: '#ca8a04', temperature: 35, bubbles: false, type: 'normal', vfx: 'colorChange' },
+  { reactants: ['Fe2O3','HNO3'], equation: 'Fe₂O₃ + 6HNO₃ → 2Fe(NO₃)₃ + 3H₂O', description: '氧化铁溶于硝酸。', phenomenon: '红棕色粉末溶解，溶液变黄色', color: '#ca8a04', temperature: 35, bubbles: false, type: 'normal', vfx: 'colorChange' },
+  { reactants: ['CuO','HNO3'], equation: 'CuO + 2HNO₃ → Cu(NO₃)₂ + H₂O', description: '氧化铜溶于硝酸。', phenomenon: '黑色粉末溶解，溶液变蓝色', color: '#38bdf8', temperature: 35, bubbles: false, type: 'normal', vfx: 'colorChange' },
+
+  // === 补充：更多沉淀反应 ===
+  { reactants: ['FeSO4','NaOH'], equation: 'FeSO₄ + 2NaOH → Fe(OH)₂↓ + Na₂SO₄', description: '生成白色氢氧化亚铁沉淀（迅速被氧化变绿再变褐）。', phenomenon: '白色沉淀生成，迅速变为灰绿色，最终变红褐色(被空气氧化)', color: '#86efac', temperature: 25, bubbles: false, type: 'normal', precipitate: true, vfx: 'precipitate', precipitateColor: '#a3a3a3' },
+  { reactants: ['CuSO4','BaCl2'], equation: 'CuSO₄ + BaCl₂ → BaSO₄↓ + CuCl₂', description: '硫酸铜与氯化钡，双重反应。', phenomenon: '白色沉淀(BaSO₄)，溶液保持蓝色', color: '#38bdf8', temperature: 25, bubbles: false, type: 'normal', precipitate: true, vfx: 'precipitate', precipitateColor: '#f5f5f4' },
+  { reactants: ['AgNO3','KI'], equation: 'AgNO₃ + KI → AgI↓ + KNO₃', description: '碘化银黄色沉淀。', phenomenon: '黄色沉淀(AgI)', color: '#fde047', temperature: 25, bubbles: false, type: 'normal', precipitate: true, vfx: 'precipitate', precipitateColor: '#eab308' },
+  { reactants: ['KOH','CuSO4'], equation: '2KOH + CuSO₄ → Cu(OH)₂↓ + K₂SO₄', description: '生成蓝色氢氧化铜沉淀。', phenomenon: '天蓝色絮状沉淀Cu(OH)₂', color: '#67e8f9', temperature: 25, bubbles: false, type: 'normal', precipitate: true, vfx: 'precipitate', precipitateColor: '#67e8f9' },
+  { reactants: ['KOH','FeCl3'], equation: '3KOH + FeCl₃ → Fe(OH)₃↓ + 3KCl', description: '生成红褐色氢氧化铁沉淀。', phenomenon: '红褐色絮状沉淀Fe(OH)₃', color: '#92400e', temperature: 25, bubbles: false, type: 'normal', precipitate: true, vfx: 'precipitate', precipitateColor: '#92400e' },
+  { reactants: ['Na2SO4','BaCl2'], equation: 'Na₂SO₄ + BaCl₂ → BaSO₄↓ + 2NaCl', description: '硫酸钠与氯化钡。', phenomenon: '白色沉淀(BaSO₄)', color: '#f5f5f4', temperature: 25, bubbles: false, type: 'normal', precipitate: true, vfx: 'precipitate', precipitateColor: '#f5f5f4' },
+
+  // === 补充：碱金属+醋酸 ===
+  { reactants: ['Na','CH3COOH'], equation: '2Na + 2CH₃COOH → 2CH₃COONa + H₂↑', description: '⚠️ 钠与醋酸反应剧烈。', phenomenon: '钠块剧烈反应，产生大量H₂', color: 'rgba(224,242,254,0.6)', temperature: 75, bubbles: true, gasEmoji: '🔥', type: 'danger', vfx: 'explosion' },
+  { reactants: ['Mg','CH3COOH'], equation: 'Mg + 2CH₃COOH → (CH₃COO)₂Mg + H₂↑', description: '镁与醋酸反应。', phenomenon: '镁带溶解，产生气泡(H₂)', color: 'rgba(224,242,254,0.6)', temperature: 45, bubbles: true, gasEmoji: '💨', type: 'normal', vfx: 'fizz' },
+  { reactants: ['Fe','CH3COOH'], equation: 'Fe + 2CH₃COOH → (CH₃COO)₂Fe + H₂↑', description: '铁与醋酸缓慢反应。', phenomenon: '铁片缓慢溶解，少量气泡', color: '#86efac', temperature: 35, bubbles: true, gasEmoji: '💨', type: 'normal', vfx: 'fizz' },
+  { reactants: ['Zn','CH3COOH'], equation: 'Zn + 2CH₃COOH → (CH₃COO)₂Zn + H₂↑', description: '锌与醋酸反应。', phenomenon: '锌溶解，产生气泡(H₂)', color: 'rgba(224,242,254,0.6)', temperature: 40, bubbles: true, gasEmoji: '💨', type: 'normal', vfx: 'fizz' },
+
+  // === 补充：碱遇CO2 ===
+  { reactants: ['NaOH','CO2'], equation: '2NaOH + CO₂ → Na₂CO₃ + H₂O', description: 'NaOH吸收CO₂。', phenomenon: '无明显现象（CO₂被吸收）', color: 'rgba(224,242,254,0.6)', temperature: 25, bubbles: false, type: 'normal', vfx: 'gentle' },
+
+  // === 补充：碘相关 ===
+  { reactants: ['KI','FeCl3'], equation: '2KI + 2FeCl₃ → 2FeCl₂ + 2KCl + I₂', description: '氯化铁氧化碘离子，生成碘单质。', phenomenon: '溶液变为深棕色(I₂析出)', color: '#78350f', temperature: 25, bubbles: false, type: 'normal', vfx: 'colorMagic' },
+
+  // === 著名的不反应（给出科学解释） ===
+  { reactants: ['Cu','HCl'], equation: 'Cu + HCl → ✘ 不反应', description: '铜的活动性排在氢之后(Cu < H)，无法置换稀酸中的氢。金属活动性：K>Ca>Na>Mg>Al>Zn>Fe>Sn>Pb>(H)>Cu>Ag>Au', phenomenon: '铜片放入盐酸中，毫无变化。这就是为什么铜器不怕酸雨', color: null, temperature: 25, bubbles: false, type: 'normal', vfx: 'none', noReaction: true },
+  { reactants: ['Cu','H2SO4'], equation: 'Cu + H₂SO₄(稀) → ✘ 不反应', description: '铜不能置换稀硫酸中的氢。但浓硫酸+加热可以反应：Cu + 2H₂SO₄(浓) →(△) CuSO₄ + SO₂↑ + 2H₂O。试试点击「加热」按钮！', phenomenon: '室温下无变化。如需反应请加热（浓硫酸氧化性反应）', color: null, temperature: 25, bubbles: false, type: 'normal', vfx: 'none', noReaction: true },
+  { reactants: ['Ag','HCl'], equation: 'Ag + HCl → ✘ 不反应', description: '银的活动性也在氢之后(Ag < H)，不与稀酸反应。', phenomenon: '银放入盐酸无任何变化', color: null, temperature: 25, bubbles: false, type: 'normal', vfx: 'none', noReaction: true },
+  { reactants: ['Ag','H2SO4'], equation: 'Ag + H₂SO₄(稀) → ✘ 不反应', description: '银不与稀硫酸反应。', phenomenon: '无变化', color: null, temperature: 25, bubbles: false, type: 'normal', vfx: 'none', noReaction: true },
+  { reactants: ['Au','HCl'], equation: 'Au + HCl → ✘ 不反应', description: '金是最不活泼的金属之一，不溶于单一酸。只有王水(盐酸+硝酸混合)才能溶解金！', phenomenon: '金丝纹丝不动——真金不怕火炼，也不怕酸', color: null, temperature: 25, bubbles: false, type: 'normal', vfx: 'none', noReaction: true },
+  { reactants: ['Au','H2SO4'], equation: 'Au + H₂SO₄ → ✘ 不反应', description: '金不溶于硫酸。', phenomenon: '无变化', color: null, temperature: 25, bubbles: false, type: 'normal', vfx: 'none', noReaction: true },
+  { reactants: ['Au','HNO3'], equation: 'Au + HNO₃ → ✘ 不反应', description: '金不溶于硝酸。只有王水(3HCl+HNO₃)才行！', phenomenon: '无变化——所以叫"王水"，酸中之王', color: null, temperature: 25, bubbles: false, type: 'normal', vfx: 'none', noReaction: true },
+  // 王水（盐酸+硝酸 → 混合物，可以在有Au时特殊触发）
+  { reactants: ['Au','HCl','HNO3'], equation: 'Au + 3HCl + HNO₃(王水) → AuCl₃ + NO↑ + 2H₂O', description: '👑 王水溶金！盐酸和硝酸的混合物是唯一能溶解金的酸。', phenomenon: '金缓慢溶解，溶液变为金黄色，产生红棕色气体', color: '#ca8a04', temperature: 60, bubbles: true, gasEmoji: '🟤', type: 'danger', vfx: 'colorSmoke' },
 ];
 
 // ==========================================
@@ -1031,10 +1105,23 @@ function checkReactions() {
     const key = rx.reactants.slice().sort().join('+');
     if (firedReactions.has(key)) continue;
     if (!rx.reactants.every(r => beakerContents.includes(r))) continue;
+    // 需要加热的反应：未加热时跳过
+    if (rx.needsHeat && !isHeating) continue;
     firedReactions.add(key);
     foundNew = true;
 
-    // 更新液体颜色
+    // 不反应的情况 — 显示解释卡片
+    if (rx.noReaction) {
+      if (resultsDiv.querySelector('.result-empty')) resultsDiv.innerHTML = '';
+      const card = document.createElement('div');
+      card.className = 'reaction-card';
+      card.style.background = 'rgba(100,116,139,0.15)'; card.style.borderColor = 'rgba(100,116,139,0.3)';
+      card.innerHTML = `<div class="reaction-equation">${rx.equation}</div><div class="reaction-desc">${rx.description}</div><div class="reaction-phenomenon"><span>🔍 现象：</span>${rx.phenomenon}</div>`;
+      resultsDiv.insertBefore(card, resultsDiv.firstChild);
+      continue;
+    }
+
+    // 正常反应
     if (rx.color) {
       const liquid = document.getElementById('beakerLiquid');
       liquid.style.background = rx.color;
@@ -1044,7 +1131,7 @@ function checkReactions() {
     if (rx.bubbles) startBubbles();
     if (rx.gasEmoji) showGasEffect(rx.gasEmoji);
 
-    playReactionVFX(rx);
+    if (rx.vfx !== 'none') playReactionVFX(rx);
 
     if (resultsDiv.querySelector('.result-empty')) resultsDiv.innerHTML = '';
     const card = document.createElement('div');
@@ -1112,6 +1199,8 @@ function toggleHeat() {
     currentTemp = Math.min(100, currentTemp + 30);
     SFX.hiss(0.5);
     if (currentTemp >= 80) VFX.boil();
+    // 加热后重新检查是否有需要加热的反应
+    checkReactions();
   } else {
     currentTemp = Math.max(25, currentTemp - 20);
   }
