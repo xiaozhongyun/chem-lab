@@ -458,6 +458,21 @@ function toggleSound() {
   document.getElementById('soundToggle').textContent = soundEnabled ? '🔊' : '🔇';
 }
 
+// 手机浏览器必须在用户交互时解锁音频
+let audioUnlocked = false;
+function unlockAudio() {
+  if (audioUnlocked) return;
+  const ctx = getAudioCtx();
+  if (ctx.state === 'suspended') ctx.resume();
+  // 播放一个静音buffer来解锁
+  const buf = ctx.createBuffer(1, 1, ctx.sampleRate);
+  const src = ctx.createBufferSource();
+  src.buffer = buf; src.connect(ctx.destination); src.start(0);
+  audioUnlocked = true;
+}
+document.addEventListener('touchstart', unlockAudio, { once: true });
+document.addEventListener('click', unlockAudio, { once: true });
+
 // ==========================================
 // 视觉特效引擎
 // ==========================================
