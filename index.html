@@ -1078,17 +1078,12 @@ function addChemical(id) {
 
 function updateBeakerVisual() {
   const liquid = document.getElementById('beakerLiquid');
-  if (beakerContents.length === 0) { liquid.style.height = '0'; liquid.style.background = 'transparent'; return; }
   const liquidItems = beakerContents.filter(id => chemicals[id].state === 'liquid');
-  const solidItems = beakerContents.filter(id => chemicals[id].state !== 'liquid' && chemicals[id].state !== 'gas');
-  const height = Math.min(70, 15 + liquidItems.length * 18 + solidItems.length * 6);
+  if (liquidItems.length === 0) { liquid.style.height = '0'; liquid.style.background = 'transparent'; return; }
+  const height = Math.min(70, 15 + liquidItems.length * 18);
   liquid.style.height = height + '%';
   const lastLiquid = [...beakerContents].reverse().find(id => chemicals[id].state === 'liquid');
-  if (lastLiquid) {
-    liquid.style.background = chemicals[lastLiquid].color;
-  } else {
-    liquid.style.background = 'rgba(148,163,184,0.15)';
-  }
+  liquid.style.background = lastLiquid ? chemicals[lastLiquid].color : 'transparent';
 }
 
 function updateAddedItems() {
